@@ -28,7 +28,7 @@ public class RobotContainer
     
     
     private final SystemsTestingAuto m_newAutoCommand = new SystemsTestingAuto(m_romiDrivetrain);
-    public static Joystick driverController = new Joystick(Constants.Driver_Joystic);
+    public static Joystick driverController = new Joystick(Constants.Driver_Joystick);
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */

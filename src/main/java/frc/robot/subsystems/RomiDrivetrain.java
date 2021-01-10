@@ -43,32 +43,51 @@ public class RomiDrivetrain extends SubsystemBase
         m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
     }
 
-    public void deadbandedArcadeDrive() {
-		double throttle, turn;
-		if (RobotContainer.driverController.getRawAxis(Constants.RightStickX) > 0.1
-				|| RobotContainer.driverController.getRawAxis(Constants.RightStickY) < -0.1) {
-			if (RobotContainer.driverController.getRawAxis(Constants.RightStickX) < 0) {
-				throttle = -Math.sqrt(Math.abs(RobotContainer.driverController.getRawAxis(Constants.RightStickX)));
-			} else {
-				throttle = Math.sqrt(RobotContainer.driverController.getRawAxis(Constants.RightStickX));
-			}
-		} else {
-			throttle = 0;
-		}
-		/* check deadband */
+    public void deadbandedArcadeDrive() 
+    {
+        double throttle, turn;
 
-		if (RobotContainer.driverController.getRawAxis(Constants.LeftStickY) > 0.2
-				|| RobotContainer.driverController.getRawAxis(Constants.LeftStickY) < -0.2) {
-			if (RobotContainer.driverController.getRawAxis(Constants.LeftStickY) < 0) {
-				turn = -Math.sqrt(Math.abs(RobotContainer.driverController.getRawAxis(Constants.LeftStickY)));
-			} else {
-				turn = Math.sqrt(RobotContainer.driverController.getRawAxis(Constants.LeftStickY));
-			}
-		} else {
-			turn = 0;
-		}
-		arcadeDrive(throttle, -turn);
-	}
+        /* account for controller deadband */
+
+        if ( (RobotContainer.driverController.getRawAxis(Constants.RightStick_Yaxis) > Constants.Throttle_Deadband) || 
+             (RobotContainer.driverController.getRawAxis(Constants.RightStick_Yaxis) < -Constants.Throttle_Deadband) )
+            {
+                if (RobotContainer.driverController.getRawAxis(Constants.RightStick_Yaxis) < 0) 
+                {
+                    throttle = -Math.sqrt(Math.abs(RobotContainer.driverController.getRawAxis(Constants.RightStick_Yaxis)));
+                    //throttle = -Math.abs(RobotContainer.driverController.getRawAxis(Constants.RightStick_Xaxis));
+                } 
+                else 
+                {
+                   throttle = Math.sqrt(RobotContainer.driverController.getRawAxis(Constants.RightStick_Yaxis));
+                    //throttle = Math.abs(RobotContainer.driverController.getRawAxis(Constants.RightStick_Xaxis));
+                }
+            }
+        else 
+        {
+            throttle = 0;
+        }
+
+
+        if ( (RobotContainer.driverController.getRawAxis(Constants.LeftStick_Xaxis) > Constants.Steering_Deadband) || 
+             (RobotContainer.driverController.getRawAxis(Constants.LeftStick_Xaxis) < -Constants.Steering_Deadband))
+            {
+                if (RobotContainer.driverController.getRawAxis(Constants.LeftStick_Xaxis) < 0) 
+                {
+                    turn = -Math.sqrt(Math.abs(RobotContainer.driverController.getRawAxis(Constants.LeftStick_Xaxis)));
+                } 
+                else 
+                {
+                    //turn = Math.sqrt(RobotContainer.driverController.getRawAxis(Constants.LeftStick_Xaxis));
+                    turn = Math.sqrt(Math.abs(RobotContainer.driverController.getRawAxis(Constants.LeftStick_Xaxis)));
+                }
+            } 
+        else 
+        {
+            turn = 0;
+        }
+            arcadeDrive(throttle, -turn);
+    }
 
     public void resetEncoders()
     {
